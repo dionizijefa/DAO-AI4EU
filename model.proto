@@ -1,0 +1,36 @@
+//Define the used version of proto
+syntax = "proto3";
+
+//Define a message to hold the features input by the client
+message Input {
+    string input_smiles = 1 ;
+}
+
+//Define a message to hold the GCN prediction
+message Prediction {
+    float predicted_class         = 1 ;
+    float withdrawn_probability   = 2 ;
+    float pvalue_approved         = 3 ;
+    float pvalue_withdrawn        = 4 ;
+}
+
+//Define a message to hold the Complementary model prediction
+message ComplementaryModel {
+    map<string, float> complementary_prediction   = 1 ;
+    map<string, float> complementary_tasks        = 2 ;
+    map<string, float> shap_values                = 3 ;
+}
+
+
+//Define a message to hold the explanation
+message GNNExplanation {
+    string bond_importance                          = 1 ;
+    map<string, float> feature_importance           = 2 ;
+}
+
+//Define the service
+service Predict {
+    rpc predict(Input) returns (Prediction);
+    rpc complementary_model(Input) returns (ComplementaryModel);
+    rpc explain(Input) returns (GNNExplanation);
+}
